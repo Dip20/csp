@@ -1,0 +1,17 @@
+ATM login tab after AEPS login tab
+
+add user tab should show to all user(user panel..)
+
+ADD user DESC order
+admin- 1 super distributor distributor 3  retailer 4agent
+
+
+Delete user options only avail to admin panel(CONSOLE)
+
+payment form and onclick pay & register show the QR code of Paytm
+
+6/09/2021  1000/-
+upload to server..
+
+3000+500 = 3500/- 10/09/2021
+shopping function
