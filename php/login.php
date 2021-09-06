@@ -31,6 +31,7 @@ if (isset($_POST['login_btn']))
           $_SESSION['username']        = $data['username'];
           $_SESSION['contact']         = $data['contact'];
           $_SESSION['access']          = $data['access'];
+          $_SESSION['role']            = $data['role'];
           $_SESSION['loges_as']        = "User";
 
 

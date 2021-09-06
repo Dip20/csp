@@ -20,11 +20,11 @@ if (isset($_POST['add_user_btn']))
     {
 
       $url = base64_encode("Add User");
-      redirect("../admin/index.php?li=$url&status=user_created");
+      redirect("../index.php?li=$url&status=user_created");
 
     }else
     {
-      redirect("../admin/index.php?li=$url&status=failed");
+      redirect("../index.php?li=$url&status=failed");
 
     }
 

@@ -105,6 +105,12 @@ function is_active($value='',$link='')
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link <?php is_active("ATM login",$link); ?>" href="index.php?li=<?php echo base64_encode("ATM login"); ?>">
+                <i class="material-icons">vertical_split</i>
+                <span>ATM login </span>
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link  <?php is_active("ESRAM Card",$link); ?>" href="index.php?li=<?php echo base64_encode("ESRAM Card"); ?>">
                 <i class="material-icons">note_add</i>
                 <span>ESRAM Card</span>
@@ -275,27 +281,26 @@ function is_active($value='',$link='')
 
             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
               <!-- Quick Post -->
-              <div class="card card-small h-100">
+              <div class="card ">
                 <div class="card-header border-bottom">
                   <h6 class="m-0">Add User</h6>
                 </div>
                 <div class="card-body d-flex flex-column">
                   <form class="quick-post-form" method="post" action="../php/add_user.php">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username..">
+                      <input required type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username..">
                     </div>
                     <div class="form-group">
-                      <input type="number" class="form-control" name="contact" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Mobile Number..">
+                      <input required type="number" class="form-control" name="contact" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Mobile Number..">
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control" name="password" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Create Password">
+                      <input required type="password" class="form-control" name="password" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Create Password">
                     </div>
                     <div class="form-group">
                       <label>UserType</label>
-                      <select class="form-control" name="user_type">
-                        <option value="User">User</option>
-                        <!-- <option value="Admin">Admin</option> -->
-                        <option value="Admin">Admin</option>
+                      <select class="form-control" name="user_role" required>
+                        <option value="">--Select--</option>
+                        <?php  $role = $_SESSION['role'];  user_role("$role"); ?>
                       </select>
                     </div>
                     <div class="form-group mb-0">
@@ -306,29 +311,47 @@ function is_active($value='',$link='')
               </div>
               <!-- End Quick Post -->
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
               <!-- Quick Post -->
               <div class="card card-small h-100">
                 <div class="card-header border-bottom">
                   <h6 class="m-0">Manage Users</h6>
                 </div>
                 <div class="card-body d-flex flex-column">
-                  <?php
-                    $sql = mysqli_query($conn,"SELECT * FROM user_login WHERE is_deleted='0' ORDER BY ID DESC");
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Username</th>
+                      <th>Mobile</th>
+                      <th>Role</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                <?php
+                  $count=0;
+                  $add_by_me = $_SESSION['contact'];
 
-                    if($sql)
+                  $sql = mysqli_query($conn,"SELECT * FROM user_login WHERE is_deleted='0' AND added_by='$add_by_me' ORDER BY ID DESC");
+
+                  if($sql)
+                  {
+                    if(mysqli_num_rows($sql)>0)
                     {
-                      if(mysqli_num_rows($sql)>0)
+
+                      while ($data=mysqli_fetch_assoc($sql))
                       {
-
-                        while ($data=mysqli_fetch_assoc($sql))
-                        {
-                          ?>
-                  <div class="text-left">
-                    <a href="../php/delete-user.php?del_id=<?php echo $data['ID']; ?>" class="text-secondary"><?php echo $data['username'];?> &nbsp;
-                      <?php echo $data['contact'];?> &nbsp; <?php echo $data['access'];?> &nbsp; <i class="fa fa-trash-alt text-danger"></i> </a>
-
-                  </div>
+                        $count+=1;
+                        ?>
+                    <tr>
+                      <td><?php echo $count; ?></td>
+                      <td> <?php echo $data['username']; ?></td>
+                      <td> <?php echo $data['contact']; ?></td>
+                      <td> <?php echo $data['role']; ?></td>
+                      <td> <a href="../php/delete-user.php?del_id=<?php echo $data['ID']; ?>" class="text-secondary"><i class="fa fa-trash-alt text-danger"></i></a></td>
+                    </tr>
+                  </tbody>
                   <?php
                         }
 
@@ -343,6 +366,10 @@ function is_active($value='',$link='')
                     }
 
                     ?>
+
+                </table>
+
+                  </div>
                 </div>
               </div>
               <!-- End Quick Post -->
@@ -460,7 +487,7 @@ function is_active($value='',$link='')
                           }
                         }else
                         {
-                          echo '<p class="text-danger text-center mt-3">No data Found</p>';
+                          echo '<p class="text-danger text-center mt-3">No Link Found</p>';
                         }
 
                       }else

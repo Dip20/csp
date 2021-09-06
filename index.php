@@ -105,6 +105,12 @@ function is_active($value='',$link='')
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link <?php is_active("ATM login",$link); ?>" href="index.php?li=<?php echo base64_encode("ATM login"); ?>">
+                <i class="material-icons">vertical_split</i>
+                <span>ATM login </span>
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link  <?php is_active("ESRAM Card",$link); ?>" href="index.php?li=<?php echo base64_encode("ESRAM Card"); ?>">
                 <i class="material-icons">note_add</i>
                 <span>ESRAM Card</span>
@@ -164,12 +170,12 @@ function is_active($value='',$link='')
                 {
                   $get_menu_name = $data['menu_name'];
                   ?>
-            <li class="nav-item">
-              <a class="nav-link <?php is_active("$get_menu_name",$link); ?>" href="index.php?li=<?php echo base64_encode("$get_menu_name"); ?>">
-                <i class="fa fa-angle-double-right"></i>
-                <span><?php echo $get_menu_name; ?></span>
-              </a>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link <?php is_active("$get_menu_name",$link); ?>" href="index.php?li=<?php echo base64_encode("$get_menu_name"); ?>">
+                  <i class="fa fa-angle-double-right"></i>
+                  <span><?php echo $get_menu_name; ?></span>
+                </a>
+              </li>
             <?php
                 }
 
@@ -177,6 +183,12 @@ function is_active($value='',$link='')
             }
 
             ?>
+            <li class="nav-item">
+              <a class="nav-link <?php is_active("Add User",$link); ?>" href="index.php?li=<?php echo base64_encode("Add User"); ?>">
+                <i class="fa fa-user"></i>
+                <span>Add User</span>
+              </a>
+            </li>
           </ul>
         </div>
       </aside>
@@ -256,6 +268,103 @@ function is_active($value='',$link='')
                 </h5>
                 <br>
                 <img src="images/hero_img.svg" alt="Hero Image" class="img-fluid" width="50%" height="50%">
+
+                <?php
+                  }elseif($link_decoded=='Add User')
+                  {
+                    ?>
+
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                  <!-- Quick Post -->
+                  <div class="card ">
+                    <div class="card-header border-bottom">
+                      <h6 class="m-0">Add User</h6>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                      <form class="quick-post-form" method="post" action="php/add_user_public.php">
+                        <div class="form-group">
+                          <input required type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username..">
+                        </div>
+                        <div class="form-group">
+                          <input required type="number" class="form-control" name="contact" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Mobile Number..">
+                        </div>
+                        <div class="form-group">
+                          <input required type="password" class="form-control" name="password" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Create Password">
+                        </div>
+                        <div class="form-group">
+                          <label>UserType</label>
+                          <select class="form-control" name="user_role" required>
+                            <option value="">--Select--</option>
+                            <?php  $role = $_SESSION['role'];  user_role("$role"); ?>
+                          </select>
+                        </div>
+                        <div class="form-group mb-0">
+                          <button type="submit" name="add_user_btn" class="btn btn-accent">Create User</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <!-- End Quick Post -->
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+                  <!-- Quick Post -->
+                  <div class="card card-small h-100">
+                    <div class="card-header border-bottom">
+                      <h6 class="m-0">Manage Users</h6>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Username</th>
+                          <th>Mobile</th>
+                          <th>Role</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                    <?php
+                      $count=0;
+                      $add_by_me = $_SESSION['contact'];
+
+                      $sql = mysqli_query($conn,"SELECT * FROM user_login WHERE is_deleted='0' AND added_by='$add_by_me' ORDER BY ID DESC");
+
+                      if($sql)
+                      {
+                        if(mysqli_num_rows($sql)>0)
+                        {
+
+                          while ($data=mysqli_fetch_assoc($sql))
+                          {
+                            $count+=1;
+                            ?>
+                        <tr>
+                          <td><?php echo $count; ?></td>
+                          <td> <?php echo $data['username']; ?></td>
+                          <td> <?php echo $data['contact']; ?></td>
+                          <td> <?php echo $data['role']; ?></td>
+                        </tr>
+                      </tbody>
+                      <?php
+                            }
+
+                          }
+
+                        }else
+                        {
+                          echo "Server Not responding";
+                        }
+
+                        ?>
+
+                    </table>
+
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Quick Post -->
+                </div>
+
 
                 <?php
               }elseif($link_decoded!=='')
@@ -351,6 +460,11 @@ function is_active($value='',$link='')
        if ($_GET['status']=="0")
          {
            echo '<script>swal("Successfully Loged in!", "You can select Menu From Left Sidebar", "success");</script>';
+           
+         }elseif($_GET['status']=="user_created")
+         {
+           echo '<script>swal("User Created!", "", "success");</script>';
+
          }
      }
 

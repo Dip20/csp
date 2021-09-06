@@ -30,11 +30,9 @@ if (isset($_POST['login_btn']))
           $_SESSION['username']        = $data['username'];
           $_SESSION['contact']         = $data['contact'];
           $_SESSION['access']          = $data['access'];
+          $_SESSION['role']            = $data['role'];
           $_SESSION['loges_as']        = "Admin";
 
-
-          $user_id    = $data['ID'];
-          // user_logs($conn,$user_id,"You Loged In!");
 
           redirect("../admin/index.php?status=0");
         }else

@@ -1,0 +1,2 @@
+replace the local url in store.php.
+<img src="<?php echo "http://127.0.0.1/csp/"; ?>images/hero_img.svg" class="card-img-top" alt="Product Images [100%x225]">

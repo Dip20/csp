@@ -4,6 +4,11 @@ add user tab should show to all user(user panel..)
 
 ADD user DESC order
 admin- 1 super distributor distributor 3  retailer 4agent
+// admin
+// super distributor
+// distributor
+// retailer
+// agent
 
 
 Delete user options only avail to admin panel(CONSOLE)
